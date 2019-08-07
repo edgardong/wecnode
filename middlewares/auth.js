@@ -42,6 +42,15 @@ class Auth {
       await next()
     }
   }
+
+  static verifyToken(token) {
+    try {
+      jwt.verify(token, global.config.security.secretKey)
+    } catch (error) {
+      return false
+    }
+    return true
+  }
 }
 
 module.exports = {

@@ -4,7 +4,8 @@ const router = new Router({
 })
 
 const {
-  TokenValidatar
+  TokenValidatar,
+  NotEmptyValidator
 } = require('../../validators/validator')
 const {
   LoginType
@@ -36,6 +37,17 @@ router.post('/', async (ctx, next) => {
   }
   ctx.body = {
     token
+  }
+})
+
+/**
+ * 校验token
+ */
+router.post('/verify', async (ctx, next) => {
+  const v = await new NotEmptyValidator().validate(ctx)
+  const result = Auth.verifyToken(v.get('body.token'))
+  ctx.body = {
+    result
   }
 })
 
