@@ -1,4 +1,9 @@
 const bcrypt = require('bcryptjs')
+const {
+  unset,
+  clone,
+  isArray
+} = require('lodash')
 
 const {
   sequelize
@@ -50,6 +55,15 @@ class User extends Model {
   static async registerUserByOpenId(openid) {
     return await User.create({
       openid
+    })
+  }
+}
+
+Model.prototype.toJSON = function () {
+  if (isArray(this.exclude)) {
+    let data = clone(this.dataValues)
+    data.forEach(d => {
+      unset(data, d)
     })
   }
 }
