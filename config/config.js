@@ -15,6 +15,7 @@ module.exports = {
   miniProgram: {
     appid: 'wx9ba5117f7cbce76d',
     appSecret: '29a7809bc04fac72d8af77033eb8fafd',
-    loginUrl:'https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code'
-  }
+    loginUrl: 'https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code'
+  },
+  imagePrefix: 'https://www.edgarhao.cn/icestore/wecstore/public/images'
 }

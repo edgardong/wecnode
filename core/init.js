@@ -33,7 +33,7 @@ class InitManager {
 
   /**
    * load global config
-   * @param {*} path 
+   * @param {*} path
    */
   static loadConfig(path = '') {
     const configPath = path || process.cwd() + '/config/config.js'
