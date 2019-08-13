@@ -41,7 +41,7 @@ class User extends Model {
 
   /**
    * 根据openid获取用户
-   * @param {*} openid 
+   * @param {*} openid
    */
   static async getUserByOpenId(openid) {
     const user = await User.findOne({
@@ -60,12 +60,13 @@ class User extends Model {
 }
 
 Model.prototype.toJSON = function () {
+  let data = clone(this.dataValues)
   if (isArray(this.exclude)) {
-    let data = clone(this.dataValues)
-    data.forEach(d => {
+    this.exclude.forEach(d => {
       unset(data, d)
     })
   }
+  return data
 }
 
 User.init({
@@ -77,6 +78,11 @@ User.init({
   nickname: {
     type: Sequelize.STRING,
     allowNull: true
+  },
+  usertype: {
+    type: Sequelize.INTEGER,
+    defaultValue: 1,
+    comment: '用户类型 999:admin, 1:小程序用户 , 2:app 用户 3:web用户'
   },
   email: {
     type: Sequelize.STRING(128),

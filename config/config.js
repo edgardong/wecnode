@@ -2,7 +2,7 @@ module.exports = {
   enviroment: 'dev',
   database: {
     dbType: 'mysql',
-    dbName: 'blog',
+    dbName: 'wecstore',
     host: 'localhost',
     port: 3306,
     user: 'root',

@@ -15,7 +15,7 @@ const {
 class WXManager {
 
   static async codeToToken(code) {
-    // 
+    //
     const url = util.format(global.config.miniProgram.loginUrl, global.config.miniProgram.appid, global.config.miniProgram.appSecret, code)
     const result = await axios.get(url)
     if (result.status != 200) {

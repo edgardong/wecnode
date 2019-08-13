@@ -17,18 +17,18 @@ const options = {
   define: {
     timestamps: true,
     paranoid: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
-    deletedAt: 'deleted_at',
+    createdAt: 'create_time',
+    updatedAt: 'update_time',
+    deletedAt: 'delete_time',
     underscored: true
   }
 }
 
-
 const sequelize = new Sequelize(dbName, user, password, options)
 
 sequelize.sync({
-  force: false
+  force: false,
+  alter: true
 })
 
 module.exports = {
