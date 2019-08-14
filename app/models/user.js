@@ -1,9 +1,4 @@
 const bcrypt = require('bcryptjs')
-const {
-  unset,
-  clone,
-  isArray
-} = require('lodash')
 
 const {
   sequelize
@@ -26,7 +21,6 @@ class User extends Model {
         email
       }
     })
-    console.log(user)
     if (!user) {
       throw new global.errs.AuthFailed('账号或密码错误')
     } else {
@@ -44,12 +38,11 @@ class User extends Model {
    * @param {*} openid
    */
   static async getUserByOpenId(openid) {
-    const user = await User.findOne({
+    return await User.findOne({
       where: {
         openid
       }
     })
-    return user
   }
 
   static async registerUserByOpenId(openid) {
@@ -59,15 +52,6 @@ class User extends Model {
   }
 }
 
-Model.prototype.toJSON = function () {
-  let data = clone(this.dataValues)
-  if (isArray(this.exclude)) {
-    this.exclude.forEach(d => {
-      unset(data, d)
-    })
-  }
-  return data
-}
 
 User.init({
   id: {

@@ -14,7 +14,7 @@ const {
 class Banner extends Model {
   static async getBanner(id) {
     let banners = await BannerItem.getBanners(id);
-    BannerItem.prototype.exclude = ['banner_id', 'update_time', 'create_time', 'delete_time']
+    BannerItem.prototype.exclude = ['banner_id', 'create_time']
     return banners;
   }
 }

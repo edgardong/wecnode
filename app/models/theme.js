@@ -32,10 +32,10 @@ class Theme extends Model {
       ]
     })
 
-    themes.forEach(theme => {
-      theme.head_img.url = global.config.imagePrefix + theme.head_img.url
-      theme.topic_img.url = global.config.imagePrefix + theme.topic_img.url
-    })
+    // themes.forEach(theme => {
+    //   theme.head_img.url = global.config.imagePrefix + theme.head_img.url
+    //   theme.topic_img.url = global.config.imagePrefix + theme.topic_img.url
+    // })
     return themes;
   }
 }

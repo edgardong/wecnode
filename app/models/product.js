@@ -7,8 +7,50 @@ const {
   sequelize
 } = require('../../core/db')
 
-class Product extends Model {
+const {
+  ProductImage
+} = require('./productImage')
 
+class Product extends Model {
+  static async getRecent(limit) {
+    const products = await Product.findAll({
+      limit,
+      order: [
+        ['create_time', 'desc']
+      ]
+    })
+    products.forEach(pro => {
+      pro.main_img_url = global.config.imagePrefix + pro.main_img_url
+    })
+    return products
+  }
+
+  static async getPorductByCategory(category_id) {
+    const products = await Product.findAll({
+      where: {
+        category_id
+      }
+    })
+    products.forEach(pro => {
+      pro.main_img_url = global.config.imagePrefix + pro.main_img_url
+    })
+    return products
+  }
+
+  static async getPorductById(id) {
+    const product = await Product.findOne({
+      where: {
+        id
+      },
+      include: [{
+        model: ProductImage,
+        as: 'imgs',
+        include: ['img_url']
+      }]
+    })
+    product.main_img_url = global.config.imagePrefix + product.main_img_url
+    return product
+  }
 }
 
 Product.init({
@@ -53,6 +95,12 @@ Product.init({
 }, {
   sequelize,
   tableName: 'product'
+})
+
+Product.hasMany(ProductImage, {
+  sourceKey: 'id',
+  foreignKey: 'product_id',
+  as: 'imgs'
 })
 
 module.exports = {

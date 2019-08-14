@@ -5,11 +5,11 @@ const router = new Router({
 
 const {
   PositiveIntegerValidator
-} = require('../../validators/validator')
+} = require('../../../validators/validator')
 
 const {
   Auth
-} = require('../../../middlewares/auth')
+} = require('../../../../middlewares/auth')
 
 router.get('/latest', new Auth(9).m, async (ctx, next) => {
   // const path = ctx.params

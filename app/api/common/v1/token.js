@@ -1,27 +1,27 @@
 const Router = require('koa-router')
 const router = new Router({
-  prefix: '/api/v1/token'
+  prefix: '/api/common/v1/token'
 })
 
 const {
   TokenValidatar,
   NotEmptyValidator
-} = require('../../validators/validator')
+} = require('../../../validators/validator')
 const {
   LoginType
-} = require('../../lib/enum')
+} = require('../../../lib/enum')
 const {
   User
-} = require('../../models/user')
+} = require('../../../models/user')
 const {
   generateToken
-} = require('../../../core/util')
+} = require('../../../../core/util')
 const {
   Auth
-} = require('../../../middlewares/auth')
-const WXManager = require('../../services/wx')
+} = require('../../../../middlewares/auth')
+const WXManager = require('../../../services/wx')
 
-router.post('/', async (ctx, next) => {
+router.post('/user', async (ctx, next) => {
   const v = await new TokenValidatar().validate(ctx)
   const type = v.get('body.type', true)
   let token = ''

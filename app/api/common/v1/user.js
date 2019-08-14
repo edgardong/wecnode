@@ -1,13 +1,13 @@
 const Router = require('koa-router')
 const router = new Router({
-  prefix: '/api/v1/user'
+  prefix: '/api/common/v1/user'
 })
 const {
   User
-} = require('../../models/user')
+} = require('../../../models/user')
 const {
   WecRegisterValidator
-} = require('../../validators/validator')
+} = require('../../../validators/validator')
 
 router.post('/register', async (ctx, next) => {
   const v = await new WecRegisterValidator().validate(ctx)

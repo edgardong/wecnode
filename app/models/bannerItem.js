@@ -10,7 +10,7 @@ const {
   Image
 } = require('../models/image')
 
-Image.prototype.exclude = ['update_time', 'delete_time', 'create_time']
+Image.prototype.exclude = [ 'create_time']
 
 class BannerItem extends Model {
   static async getBanners(id) {
