@@ -1,13 +1,13 @@
 const {
-  HttpException
-} = require('lin-mizar')
+  WecException
+} = require('wec-tools')
 
 const catchError = async (ctx, next) => {
   try {
     await next()
   } catch (error) {
     // throw error
-    const isHttpException = error instanceof HttpException
+    const isHttpException = error instanceof WecException
     const isDev = global.config.enviroment === 'dev'
     if (isDev && !isHttpException) {
       throw error

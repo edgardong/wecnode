@@ -1,7 +1,7 @@
 const {
-  HttpException
-} = require('lin-mizar')
-class WecHttpException extends HttpException {
+  WecException
+} = require('wec-tools')
+class WecHttpException extends WecException {
   constructor(msg = '服务器错误', errorCode = 10000, code = 200) {
     super()
     this.errorCode = errorCode
@@ -19,7 +19,7 @@ class ParameterException extends WecHttpException {
   }
 }
 
-class Success extends HttpException {
+class Success extends WecHttpException {
   constructor(msg, errorCode) {
     super()
     this.code = 201
@@ -28,7 +28,7 @@ class Success extends HttpException {
   }
 }
 
-class NotFound extends HttpException{
+class NotFound extends WecHttpException{
   constructor(msg, errorCode) {
     super()
     this.code = 200
@@ -37,7 +37,7 @@ class NotFound extends HttpException{
   }
 }
 
-class AuthFailed extends HttpException{
+class AuthFailed extends WecHttpException{
   constructor(msg, errorCode) {
     super()
     this.code = 200
@@ -46,7 +46,7 @@ class AuthFailed extends HttpException{
   }
 }
 
-class Forbidden extends HttpException {
+class Forbidden extends WecHttpException {
   constructor(msg, errorCode){
     super()
     this.code = 200

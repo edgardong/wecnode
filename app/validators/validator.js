@@ -1,7 +1,7 @@
 const {
-  LinValidator,
-  Rule
-} = require('lin-mizar')
+  WecValidator,
+  WecRule
+} = require('wec-tools')
 const {
   User
 } = require('../models/user')
@@ -10,38 +10,38 @@ const {
   LoginType
 } = require('../lib/enum')
 
-class PositiveIntegerValidator extends LinValidator {
+class PositiveIntegerValidator extends WecValidator {
   constructor() {
     super()
 
     this.id = [
-      new Rule('isInt', 'id需要为正整数', {
+      new WecRule('isInt', 'id需要为正整数', {
         min: 1
       })
     ]
   }
 }
 
-class WecRegisterValidator extends LinValidator {
+class WecRegisterValidator extends WecValidator {
   constructor() {
     super()
 
     this.email = [
-      new Rule('isEmail', '邮箱地址不正确', {})
+      new WecRule('isEmail', '邮箱地址不正确', {})
     ]
 
     this.password1 = [
-      new Rule('isLength', '密码为6-32位', {
+      new WecRule('isLength', '密码为6-32位', {
         min: 6,
         max: 32
       }),
-      new Rule('matches', '密码复杂度太低', '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{6,32}$')
+      new WecRule('matches', '密码复杂度太低', '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{6,32}$')
     ]
 
     this.password2 = this.password1
 
     this.nickname = [
-      new Rule('isLength', '昵称位6-32位', {
+      new WecRule('isLength', '昵称位6-32位', {
         min: 6,
         max: 32
       })
@@ -49,8 +49,8 @@ class WecRegisterValidator extends LinValidator {
   }
 
   validatePassword(vals) {
-    const pass1 = vals.body.password1
-    const pass2 = vals.body.password2
+    const pass1 = vals.password1
+    const pass2 = vals.password2
 
     if (pass1 !== pass2) {
       throw new Error('两个密码必须相同')
@@ -60,7 +60,7 @@ class WecRegisterValidator extends LinValidator {
   }
 
   async validateEmail(vals) {
-    const email = vals.body.email
+    const email = vals.email
     const user = await User.findOne({
       where: {
         email
@@ -74,20 +74,20 @@ class WecRegisterValidator extends LinValidator {
   }
 }
 
-class TokenValidatar extends LinValidator {
+class TokenValidatar extends WecValidator {
   constructor() {
     super()
 
     this.account = [
-      new Rule('isLength', '账号不符合规则', {
+      new WecRule('isLength', '账号不符合规则', {
         min: 4,
         max: 32
       })
     ]
 
     this.secret = [
-      new Rule('isOptional'),
-      new Rule('isLength', '至少6位支付', {
+      new WecRule('isOptional'),
+      new WecRule('isLength', '至少6位支付', {
         min: 6,
         max: 128
       })
@@ -107,11 +107,13 @@ class TokenValidatar extends LinValidator {
   }
 }
 
-class NotEmptyValidator extends LinValidator {
-  constructor(){
+class NotEmptyValidator extends WecValidator {
+  constructor() {
     super()
     this.token = [
-      new Rule('isLength','token不能为空',{min:1})
+      new WecRule('isLength', 'token不能为空', {
+        min: 1
+      })
     ]
   }
 }
