@@ -8,7 +8,22 @@ const {
   sequelize
 } = require('../../core/db')
 
-class Order extends Model {}
+class Order extends Model {
+
+  static getUserOrders(user_id, page, limit = 15) {
+    console.log(user_id, page, limit)
+    const orders = Order.findAll({
+      where: {
+        user_id
+      },
+      limit,
+      offset: (page - 1) * limit
+    })
+
+    return orders
+  }
+
+}
 
 Order.init({
   id: {

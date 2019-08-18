@@ -1,7 +1,7 @@
 const {
   WecValidator,
   WecRule
-} = require('wec-tools')
+} = require('../../wec-tools')
 const {
   User
 } = require('../models/user')
@@ -87,7 +87,7 @@ class TokenValidatar extends WecValidator {
 
     this.secret = [
       new WecRule('isOptional'),
-      new WecRule('isLength', '至少6位支付', {
+      new WecRule('isLength', '至少6位字符', {
         min: 6,
         max: 128
       })
@@ -96,9 +96,10 @@ class TokenValidatar extends WecValidator {
   }
 
   validateLoginType(vals) {
-    if (!vals.body.type) {
+    console.log('validateLoginType', vals)
+    if (!vals.type) {
       throw new Error('type必须是参数')
-    } else if (!LoginType.isThisType(vals.body.type)) {
+    } else if (!LoginType.isThisType(vals.type)) {
       throw new Error('type参数不合法')
     } else {
       return true

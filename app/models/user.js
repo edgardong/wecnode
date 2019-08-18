@@ -70,7 +70,6 @@ User.init({
   },
   email: {
     type: Sequelize.STRING(128),
-    unique: true
   },
   password: {
     type: Sequelize.STRING,
@@ -82,7 +81,6 @@ User.init({
   },
   openid: {
     type: Sequelize.STRING(64),
-    unique: true
   }
 }, {
   sequelize,

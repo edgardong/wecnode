@@ -23,14 +23,14 @@ const WXManager = require('../../../services/wx')
 
 router.post('/user', async (ctx, next) => {
   const v = await new TokenValidatar().validate(ctx)
-  const type = v.get('body.type', true)
+  const type = parseInt(v.type)
   let token = ''
   switch (type) {
     case LoginType.USER_EMAIL:
-      token = await emailLogin(v.get('body.account'), v.get('body.secret'))
+      token = await emailLogin(v.account, v.secret)
       break;
     case LoginType.USER_MINI_PROGRAM:
-      token = await WXManager.codeToToken(v.get('body.account'))
+      token = await WXManager.codeToToken(v.account)
       break;
     default:
       throw new global.errs.NotFound('没有对应的处理方式')
@@ -45,7 +45,7 @@ router.post('/user', async (ctx, next) => {
  */
 router.post('/verify', async (ctx, next) => {
   const v = await new NotEmptyValidator().validate(ctx)
-  const result = Auth.verifyToken(v.get('body.token'))
+  const result = Auth.verifyToken(v.token)
   ctx.body = {
     result
   }

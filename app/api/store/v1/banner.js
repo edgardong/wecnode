@@ -16,7 +16,7 @@ const {
  */
 router.get('/:id', async (ctx, next) => {
   const v = await new PositiveIntegerValidator().validate(ctx)
-  const banners = await Banner.getBanner(v.get('path.id'))
+  const banners = await Banner.getBanner(v.id)
   ctx.body = {
     items: banners
   }
