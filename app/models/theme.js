@@ -1,12 +1,13 @@
 const {
   Sequelize,
+  Op,
   Model,
-  Op
-} = require('sequelize')
-const {
   sequelize
-} = require('../../core/db')
+} = require('./baseModel')
 
+const {
+  Product
+} = require('./product')
 const {
   Image
 } = require('./image')
@@ -69,7 +70,7 @@ Theme.init({
 })
 
 Theme.hasOne(Image, {
-  sourceKey:'head_img_id',
+  sourceKey: 'head_img_id',
   foreignKey: 'id',
   as: 'head_img'
 })

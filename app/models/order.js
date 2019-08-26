@@ -11,7 +11,7 @@ const {
 class Order extends Model {
 
   static getUserOrders(user_id, page, limit = 15) {
-    console.log(user_id, page, limit)
+    // console.log(user_id, page, limit)
     const orders = Order.findAll({
       where: {
         user_id

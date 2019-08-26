@@ -25,5 +25,14 @@ router.get('/', new Auth().m, async (ctx, next) => {
   }
 })
 
+/**
+ * 保存用户地址
+ */
+router.post('/', new Auth().m, async (ctx, next) => {
+  const data = ctx.request.body
+  const address = await UserAddress.saveAddress(data, ctx.auth.uid)
+  ctx.body = address
+})
+
 
 module.exports = router

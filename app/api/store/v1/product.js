@@ -29,7 +29,7 @@ router.get('/by_category', async (ctx, next) => {
 // 获取产品详情
 router.get('/:id', async (ctx, next) => {
   const params = await new PositiveIntegerValidator().validate(ctx)
-  console.log(params)
+  // console.log(params)
   const product = await Product.getPorductById(ctx.params.id)
   Product.prototype.exclude = ['from', 'category_id', 'update_time', 'delete_time', 'create_time']
 

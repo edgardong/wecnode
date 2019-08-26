@@ -15,7 +15,7 @@ class Auth {
 
       // 检查用户的token
       const userToken = basicAuth(ctx.req)
-      console.log(userToken)
+      // console.log(userToken)
       if (!userToken || !userToken.name) {
         throw new global.errs.Forbidden()
       }

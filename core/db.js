@@ -8,6 +8,8 @@ const {
   port,
   dbType
 } = require('../config/config').database
+
+
 const options = {
   dialect: dbType,
   host,

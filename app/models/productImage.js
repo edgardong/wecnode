@@ -40,7 +40,7 @@ ProductImage.init({
 ProductImage.hasOne(Image, {
   foreignKey: 'id',
   sourceKey: 'img_id',
-  as:'img_url'
+  as: 'img_url'
 })
 
 module.exports = {

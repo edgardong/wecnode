@@ -19,11 +19,18 @@ class Image extends Model {
 }
 
 Model.prototype.toJSON = function () {
+
+  const {
+    Product
+  } = require('./product')
+
   let data = clone(this.dataValues)
   unset(data, 'update_time')
   unset(data, 'delete_time')
   if (this instanceof Image) {
     data.url = global.config.imagePrefix + data.url
+  } else if (this instanceof Product) {
+    data.main_img_url = global.config.imagePrefix + data.main_img_url
   }
 
   if (isArray(this.exclude)) {

@@ -96,7 +96,7 @@ class TokenValidatar extends WecValidator {
   }
 
   validateLoginType(vals) {
-    console.log('validateLoginType', vals)
+    // console.log('validateLoginType', vals)
     if (!vals.type) {
       throw new Error('type必须是参数')
     } else if (!LoginType.isThisType(vals.type)) {

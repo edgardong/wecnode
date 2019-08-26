@@ -1,15 +1,17 @@
 const {
   Sequelize,
+  Op,
   Model,
-  Op
-} = require('sequelize')
-const {
   sequelize
-} = require('../../core/db')
+} = require('./baseModel')
 
 const {
   ProductImage
 } = require('./productImage')
+
+const {
+  Theme
+} = require('./theme')
 
 class Product extends Model {
   static async getRecent(limit) {
@@ -48,7 +50,7 @@ class Product extends Model {
         include: ['img_url']
       }]
     })
-    product.main_img_url = global.config.imagePrefix + product.main_img_url
+    // product.main_img_url = global.config.imagePrefix + product.main_img_url
     return product
   }
 }

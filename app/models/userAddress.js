@@ -8,7 +8,33 @@ const {
   sequelize
 } = require('../../core/db')
 
-class UserAddress extends Model {}
+class UserAddress extends Model {
+  /**
+   * 保存地址信息
+   * @param {*} data 地址信息
+   * @param {*} user_id 用户id
+   */
+  static async saveAddress(data, user_id) {
+    const address = await UserAddress.findOne({
+      where: {
+        user_id
+      }
+    })
+    if (address) {
+      UserAddress.update(data,{
+        where:{
+          user_id
+        }
+      })
+    } else {
+      UserAddress.create({
+        ...data,
+        user_id
+      })
+    }
+    return data
+  }
+}
 
 UserAddress.init({
   id: {
