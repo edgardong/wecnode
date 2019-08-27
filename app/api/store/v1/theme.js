@@ -7,6 +7,9 @@ const router = new Router({
 const {
   Theme
 } = require('../../../models/theme')
+const {
+  Image
+} = require('../../../models/image')
 
 const ThemeProduct = require('../../../models/themeProduct')
 
@@ -26,6 +29,8 @@ router.get('/', async (ctx, next) => {
 router.get('/:id', async (ctx, next) => {
   const id = ctx.params.id
   const products = await ThemeProduct.getThemeProducts(id)
+  Theme.prototype.exclude = ['topic_img_id', 'head_img_id', 'create_time']
+  Image.prototype.exclude = ['id', 'from', 'create_time']
   ctx.body = products
 })
 
