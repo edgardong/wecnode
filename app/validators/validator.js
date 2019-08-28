@@ -15,7 +15,7 @@ class PositiveIntegerValidator extends WecValidator {
     super()
 
     this.id = [
-      new WecRule('isInt', 'id需要为正整数', {
+      new WecRule('isInt', '需要为正整数', {
         min: 1
       })
     ]
@@ -27,6 +27,7 @@ class WecRegisterValidator extends WecValidator {
     super()
 
     this.email = [
+      new WecRule('isOptional'),
       new WecRule('isEmail', '邮箱地址不正确', {})
     ]
 
@@ -39,6 +40,14 @@ class WecRegisterValidator extends WecValidator {
     ]
 
     this.password2 = this.password1
+
+    this.username = [
+      new WecRule('isOptional'),
+      new WecRule('isLength', '用户名6-32位', {
+        min: 6,
+        max: 32
+      })
+    ]
 
     this.nickname = [
       new WecRule('isLength', '昵称位6-32位', {
@@ -112,8 +121,79 @@ class NotEmptyValidator extends WecValidator {
   constructor() {
     super()
     this.token = [
-      new WecRule('isLength', 'token不能为空', {
+      new WecRule('isLength', '不能为空', {
         min: 1
+      })
+    ]
+  }
+}
+
+class PaginationValidator extends WecValidator {
+  constructor() {
+    super()
+
+    this.page = [
+      new WecRule('isOptional', '', 1),
+      new WecRule('isInt', '需要为正整数', {
+        min: 1
+      })
+    ]
+
+    this.size = [
+      new WecRule('isOptional', '', 15),
+      new WecRule('isInt', '需要为正整数', {
+        min: 1
+      })
+    ]
+  }
+}
+
+class CategroyValidator extends WecValidator {
+  constructor() {
+    super()
+
+    this.name = [
+      new WecRule('isLength', '不能为空', {
+        min: 1
+      })
+    ]
+
+    this.id = [
+      new WecRule('isOptional'),
+      new WecRule('isInt', '需要为正整数')
+    ]
+
+    this.topic_img_id = [
+      new WecRule('isOptional'),
+      new WecRule('isInt', '需要为正整数')
+    ]
+
+    this.description = [
+      new WecRule('isOptional'),
+      new WecRule('isLength', '描述不能为空', {
+        min: 1
+      })
+    ]
+
+    this.is_check_show = [
+      new WecRule('isBoolean', '需要为布尔类型')
+    ]
+  }
+}
+
+class ACLoginValidator extends WecValidator {
+  constructor() {
+    super()
+
+    this.ac = [
+      new WecRule('isLength', '不能为空', {
+        min: 6
+      })
+    ]
+
+    this.se = [
+      new WecRule('isLength', '不能为空', {
+        min: 6
       })
     ]
   }
@@ -123,5 +203,8 @@ module.exports = {
   PositiveIntegerValidator,
   WecRegisterValidator,
   TokenValidatar,
-  NotEmptyValidator
+  NotEmptyValidator,
+  PaginationValidator,
+  CategroyValidator,
+  ACLoginValidator
 }

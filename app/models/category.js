@@ -1,8 +1,9 @@
 const {
   Sequelize,
   Model,
-  Op
-} = require('sequelize')
+  Op,
+  getLastPage
+} = require('./baseModel')
 const {
   sequelize
 } = require('../../core/db')
@@ -20,6 +21,39 @@ class Category extends Model {
       }]
     })
     return categorys
+  }
+
+  /**
+   * 分页获取分类
+   */
+  static async getPagination(params) {
+    let result = {
+      data: [],
+      total: 0,
+      per_page: params.size,
+      current_page: params.page,
+      last_page: 0
+    }
+
+    Image.prototype.exclude = ['id', 'from','create_time']
+
+    const products = await Category.findAndCountAll({
+      include: [{
+        model: Image,
+        as: 'img'
+      }],
+      limit: params.size,
+      offset: (params.page - 1) * params.size,
+      order: [
+        ['create_time', 'desc']
+      ]
+    })
+
+    result.data = products.rows
+    result.total = products.count
+    result.last_page = getLastPage(result.total, result.per_page)
+
+    return result
   }
 }
 

@@ -2,7 +2,8 @@ const {
   Sequelize,
   Op,
   Model,
-  sequelize
+  sequelize,
+  getLastPage
 } = require('./baseModel')
 
 const {
@@ -52,6 +53,30 @@ class Product extends Model {
     })
     // product.main_img_url = global.config.imagePrefix + product.main_img_url
     return product
+  }
+
+  static async getPaginationProduct(params) {
+    let result = {
+      data: [],
+      total: 0,
+      per_page: params.size,
+      current_page: params.page,
+      last_page: 0
+    }
+
+    const products = await Product.findAndCountAll({
+      limit: params.size,
+      offset: (params.page - 1) * params.size,
+      order: [
+        ['create_time', 'desc']
+      ]
+    })
+
+    result.data = products.rows
+    result.total = products.count
+    result.last_page = getLastPage(result.total, result.per_page)
+
+    return result
   }
 }
 

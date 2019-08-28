@@ -1,12 +1,18 @@
 const bcrypt = require('bcryptjs')
 
 const {
-  sequelize
-} = require('../../core/db')
-const {
   Sequelize,
+  sequelize,
+  DataTypes,
   Model
-} = require('sequelize')
+} = require('./baseModel')
+
+const {
+  generateToken
+} = require('../../core/util')
+const {
+  Auth
+} = require('../../middlewares/auth')
 
 class User extends Model {
 
@@ -50,29 +56,83 @@ class User extends Model {
       openid
     })
   }
+
+  /**
+   * 用户密码登录
+   * @param {*} params 
+   */
+  static async userLogin(params) {
+    const user = await User.findOne({
+      where: {
+        username: params.username
+      }
+    })
+
+    if (!user) {
+      throw new global.errs.AuthFailed('账号或密码错误')
+    } else {
+      const correct = bcrypt.compareSync(params.password, user.password)
+      if (!correct) {
+        throw new global.errs.AuthFailed('账号或密码错误')
+      }
+    }
+    return generateToken(user.id, Auth.USER)
+  }
 }
 
 
 User.init({
   id: {
-    type: Sequelize.INTEGER,
+    type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
   nickname: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: true
   },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  status: {
+    type: DataTypes.INTEGER,
+    comment: '用户状态，0可用，1禁用'
+  },
+  avatar: {
+    type: DataTypes.STRING,
+    comment: '用户头像'
+  },
+  wechat: {
+    type: DataTypes.STRING,
+    comment: '用户微信号'
+  },
+  qq: {
+    type: DataTypes.STRING,
+    comment: '用户QQ号'
+  },
+  mobile: {
+    type: DataTypes.STRING(11),
+    comment: '用户手机号'
+  },
+  last_login_time: {
+    type: DataTypes.DATE,
+    comment: '上次登录时间'
+  },
+  last_login_ip: {
+    type: DataTypes.STRING,
+    comment: '上次登录ip'
+  },
   usertype: {
-    type: Sequelize.INTEGER,
+    type: DataTypes.INTEGER,
     defaultValue: 1,
     comment: '用户类型 999:admin, 1:小程序用户 , 2:app 用户 3:web用户'
   },
   email: {
-    type: Sequelize.STRING(128),
+    type: DataTypes.STRING(128),
   },
   password: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     set(val) {
       const sault = bcrypt.genSaltSync(10)
       const psw = bcrypt.hashSync(val, sault)
@@ -80,7 +140,7 @@ User.init({
     }
   },
   openid: {
-    type: Sequelize.STRING(64),
+    type: DataTypes.STRING(64),
   }
 }, {
   sequelize,

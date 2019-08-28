@@ -5,7 +5,8 @@ const router = new Router({
 
 const {
   TokenValidatar,
-  NotEmptyValidator
+  NotEmptyValidator,
+  ACLoginValidator
 } = require('../../../validators/validator')
 const {
   LoginType
@@ -20,6 +21,33 @@ const {
   Auth
 } = require('../../../../middlewares/auth')
 const WXManager = require('../../../services/wx')
+
+const ThirdApp = require('../../../models/thirdApp')
+
+/**
+ * 第三方应用授权登录
+ */
+router.post('/app', async (ctx, next) => {
+  const params = await new ACLoginValidator().validate(ctx)
+  const result = await ThirdApp.getAppToken(params)
+  ctx.body = {
+    token: result
+  }
+})
+
+/**
+ * 用户名密码登录
+ */
+router.post('/login', async (ctx, next) => {
+  const params = await new TokenValidatar().validate(ctx, {
+    account: 'username',
+    secret: 'password'
+  })
+  const result = await User.userLogin(params)
+  ctx.body = {
+    token: result
+  }
+})
 
 router.post('/user', async (ctx, next) => {
   const v = await new TokenValidatar().validate(ctx)

@@ -30,7 +30,7 @@ const sequelize = new Sequelize(dbName, user, password, options)
 
 sequelize.sync({
   force: false,
-  alter: true
+  alter: false
 })
 
 module.exports = {

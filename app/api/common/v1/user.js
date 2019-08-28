@@ -9,13 +9,17 @@ const {
   WecRegisterValidator
 } = require('../../../validators/validator')
 
+/**
+ * 用户注册
+ */
 router.post('/register', async (ctx, next) => {
   const v = await new WecRegisterValidator().validate(ctx)
 
   const user = {
-    email: v.get('body.email'),
-    password: v.get('body.password1'),
-    nickname: v.get('body.nickname')
+    email: v.email,
+    password: v.password1,
+    nickname: v.nickname,
+    username: v.username
   }
 
   const r = await User.create(user)
