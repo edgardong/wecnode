@@ -24,6 +24,10 @@ Model.prototype.toJSON = function () {
     Product
   } = require('./product')
 
+  const {
+    Order
+  } = require('./order')
+
   let data = clone(this.dataValues)
   unset(data, 'update_time')
   unset(data, 'delete_time')
@@ -31,6 +35,9 @@ Model.prototype.toJSON = function () {
     data.url = global.config.imagePrefix + data.url
   } else if (this instanceof Product) {
     data.main_img_url = global.config.imagePrefix + data.main_img_url
+  } else if (this instanceof Order) {
+    data.snap_address = JSON.parse(data.snap_address)
+    data.snap_items = JSON.parse(data.snap_items)
   }
 
   if (isArray(this.exclude)) {
