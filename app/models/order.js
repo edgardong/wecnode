@@ -3,6 +3,7 @@ const {
   Model,
   sequelize,
   getLastPage,
+  DataTypes,
   Op
 } = require('./baseModel')
 
@@ -13,6 +14,9 @@ const {
 const {
   Product
 } = require('./product')
+const {
+  User
+} = require('./user')
 
 class Order extends Model {
 
@@ -106,6 +110,11 @@ class Order extends Model {
     if (!address) {
       throw new Error('用户地址不存在,无法下单')
     }
+    const user = await User.findOne({
+      where: {
+        id: userId
+      }
+    })
     let order_no = this.makeOrderNo()
     let snap = {
       total_price: data.totalPrice,
@@ -115,7 +124,8 @@ class Order extends Model {
       snap_name: data.products[0].name,
       snap_img: data.products[0].main_img_url,
       order_no: order_no,
-      user_id: userId
+      user_id: userId,
+      open_id: user.openid
     };
     if (data.products.length > 1) {
       snap.snap_name += '等'
@@ -273,6 +283,10 @@ Order.init({
   type: {
     type: Sequelize.INTEGER,
     comment: '订单类型 1：支付宝APP, 2:支付宝WEB，3:微信APP，4:微信WEB, 5:微信小程序'
+  },
+  open_id: {
+    type: DataTypes.STRING,
+    comment: '用户openid'
   }
 }, {
   sequelize,

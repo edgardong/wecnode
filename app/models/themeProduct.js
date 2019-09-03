@@ -23,7 +23,7 @@ class ThemeProduct extends Model {
    */
   static async getThemeProducts(id) {
     Product.prototype.exclude = ['from', 'create_time', 'category_id']
-    const products = Theme.findAll({
+    const products = Theme.findOne({
       where: {
         id
       },

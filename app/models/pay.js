@@ -12,6 +12,9 @@ const {
 } = require('../lib/enum')
 
 const WxPay = require('../services/pay/wxpay/wxpay')
+const {
+  getXMLNodeValueByKey
+} = require('../services/pay/wxpay/util')
 
 class Pay {
   static async preOrder(params) {
@@ -29,6 +32,15 @@ class Pay {
     const result = await Order.checkStockByIds(ids, order.snap_items)
     if (result.pass) {
       const data = await WxPay.unifiedOrder(order)
+      // 回写订单预支付id
+      const prepay_id = data.package.replace('prepay_id=', '')
+      Order.update({
+        prepay_id
+      }, {
+        where: {
+          id: order.id
+        }
+      })
       return data
     }
   }
@@ -38,10 +50,13 @@ class Pay {
    * @param {Object} data 成功后的返回数据
    */
   static async paySuccess(data) {
-    if (data.return_code === 'SUCCESS') {
+    const return_code = await getXMLNodeValueByKey(data, 'return_code')
+    const out_trade_no = await getXMLNodeValueByKey(data, 'out_trade_no')
+
+    if (return_code === 'SUCCESS') {
       const order = await Order.findOne({
         where: {
-          order_no: data.out_trade_no
+          order_no: out_trade_no
         }
       })
       if (!order) {
@@ -90,7 +105,7 @@ class Pay {
         status: orderStatus
       }, {
         where: {
-          order_no: data.out_trade_no
+          order_no: out_trade_no
         }
       })
     }
