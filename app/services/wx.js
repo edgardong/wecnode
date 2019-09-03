@@ -7,13 +7,17 @@ const {
 const {
   Auth
 } = require('../../middlewares/auth')
-
+const AppToken = require('../models/appToken')
 const {
   generateToken
 } = require('../../core/util')
 
 class WXManager {
 
+  /**
+   * 根据小程序生成token
+   * @param {String} code 小程序code
+   */
   static async codeToToken(code) {
     //
     const url = util.format(global.config.miniProgram.loginUrl, global.config.miniProgram.appid, global.config.miniProgram.appSecret, code)
@@ -40,6 +44,51 @@ class WXManager {
 
     return generateToken(user.id, Auth.USER)
 
+  }
+
+  /**
+   * 获取access_token
+   */
+  static async getAccessToken(appid, appSecret) {
+    const localToken = await AppToken.findOne({
+      where: {
+        appid
+      }
+    })
+    if (localToken) {
+      const currentTime = new Date().getTime()
+      if (localToken.start_time.getTime() + localToken.expires_in < currentTime - 20) {
+        return localToken.access_token
+      }
+    }
+    let url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s'
+    let requestUrl = util.format(url, appid, appSecret)
+    // 校验本地是否过期
+    // 过期则请求新的token，并缓存本地
+    const result = await axios.get(requestUrl)
+    const data = result.data
+    if (!data.access_token) {
+      throw new Error('获取token失败 ' + data.errmsg)
+    }
+    if (!localToken) {
+      AppToken.create({
+        appid,
+        access_token: data.access_token,
+        expires_in: data.expires_in,
+        start_time: new Date()
+      })
+    } else {
+      AppToken.update({
+        access_token: data.access_token,
+        expires_in: data.expires_in,
+        start_time: new Date()
+      }, {
+        where: {
+          appid
+        }
+      })
+    }
+    return data.access_token
   }
 }
 

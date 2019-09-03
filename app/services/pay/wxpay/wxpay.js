@@ -47,7 +47,7 @@ class WxPay {
     formData += "<sign>" + sign + "</sign>";
     formData += '<openid>' + openid + '</openid>'
     formData += "</xml>";
-    console.log('formData===', formData);
+    // console.log('formData===', formData);
 
     let unifiedOrderUrl = 'https://api.mch.weixin.qq.com/pay/unifiedorder'
     let result = await axios.post(unifiedOrderUrl, formData)

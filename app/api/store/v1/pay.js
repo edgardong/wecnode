@@ -21,13 +21,23 @@ router.post('/pre_order', new Auth().m, async (ctx, next) => {
   ctx.body = result
 })
 
+function createXml(str) {
+  if (document.all) {
+    var xmlDom = new ActiveXObject("Microsoft.XMLDOM");
+    xmlDom.loadXML(str);
+    return xmlDom;
+  } else
+    return new DOMParser().parseFromString(str, "text/xml");
+}
+
 /**
  * 支付通知
  */
 router.post('/notify', async (ctx, next) => {
   const data = ctx.request.body
-  const result = await Pay.paySuccess(data)
-  ctx.body = ''
+  const result = await Pay.paySuccess(data.xml)
+  ctx.body = createXml('<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>')
+  console.log(ctx.body)
 })
 
 router.post('/test', async (ctx, next) => {

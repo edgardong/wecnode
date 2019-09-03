@@ -10,7 +10,7 @@ const {
 const {
   OrderStatus
 } = require('../lib/enum')
-
+const WxPush = require('../services/push/wxpush')
 const WxPay = require('../services/pay/wxpay/wxpay')
 const {
   getXMLNodeValueByKey
@@ -50,9 +50,10 @@ class Pay {
    * @param {Object} data 成功后的返回数据
    */
   static async paySuccess(data) {
-    const return_code = await getXMLNodeValueByKey(data, 'return_code')
-    const out_trade_no = await getXMLNodeValueByKey(data, 'out_trade_no')
-
+    // const return_code = await getXMLNodeValueByKey(data, 'return_code')
+    const return_code = data.return_code[0]
+    // const out_trade_no = await getXMLNodeValueByKey(data, 'out_trade_no')
+    const out_trade_no = data.out_trade_no[0]
     if (return_code === 'SUCCESS') {
       const order = await Order.findOne({
         where: {
@@ -78,6 +79,18 @@ class Pay {
           stock: dbRecord.dbStock - item.counts
         }
       })
+
+      // 推送微信消息
+      const pushData = {
+        openid: order.open_id,
+        prepay_id: order.prepay_id,
+        snap_name: order.snap_name,
+        total_price: order.total_price,
+        create_time: order.create_time,
+        order_no: order.order_no,
+        id: order.id
+      }
+      WxPush.sendPayMessage(pushData)
 
       sequelize.transaction((t) => {
         return Promise.all([ // 更新订单状态
