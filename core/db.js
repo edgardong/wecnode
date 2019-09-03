@@ -23,6 +23,11 @@ const options = {
     updatedAt: 'update_time',
     deletedAt: 'delete_time',
     underscored: true
+  },
+  // 添加这个配置
+  dialectOptions: {
+    dateStrings: true,
+    typeCast: true
   }
 }
 

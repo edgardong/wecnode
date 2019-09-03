@@ -79,7 +79,7 @@ class Pay {
           stock: dbRecord.dbStock - item.counts
         }
       })
-
+      // console.log(order)
       // 推送微信消息
       const pushData = {
         openid: order.open_id,

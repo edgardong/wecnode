@@ -57,7 +57,8 @@ class WXManager {
     })
     if (localToken) {
       const currentTime = new Date().getTime()
-      if (localToken.start_time.getTime() + localToken.expires_in < currentTime - 20) {
+      console.log(new Date(localToken.start_time))
+      if (new Date(localToken.start_time).getTime() + localToken.expires_in < currentTime - 20) {
         return localToken.access_token
       }
     }

@@ -21,23 +21,14 @@ router.post('/pre_order', new Auth().m, async (ctx, next) => {
   ctx.body = result
 })
 
-function createXml(str) {
-  if (document.all) {
-    var xmlDom = new ActiveXObject("Microsoft.XMLDOM");
-    xmlDom.loadXML(str);
-    return xmlDom;
-  } else
-    return new DOMParser().parseFromString(str, "text/xml");
-}
-
 /**
  * 支付通知
  */
 router.post('/notify', async (ctx, next) => {
   const data = ctx.request.body
   const result = await Pay.paySuccess(data.xml)
-  ctx.body = createXml('<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>')
-  console.log(ctx.body)
+  ctx.type='xml'
+  ctx.body = '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>'
 })
 
 router.post('/test', async (ctx, next) => {
@@ -74,8 +65,10 @@ router.post('/test', async (ctx, next) => {
   // const xmlreader = require('xmlreader')
   // xmlreader.read(xmlStr, (err, resp) => {
   // ctx.body = resp.xml['appid'].text()
-  ctx.body = await getXMLNodeValueByKey(xmlStr, 'appid')
+  // ctx.body = await getXMLNodeValueByKey(xmlStr, 'appid')
   // })
+  ctx.type='xml'
+  ctx.body = xmlStr
 })
 
 module.exports = router

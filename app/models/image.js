@@ -32,9 +32,13 @@ Model.prototype.toJSON = function () {
   unset(data, 'update_time')
   unset(data, 'delete_time')
   if (this instanceof Image) {
-    data.url = global.config.imagePrefix + data.url
+    if (!data.url.startsWith('http')) {
+      data.url = global.config.imagePrefix + data.url
+    }
   } else if (this instanceof Product) {
-    data.main_img_url = global.config.imagePrefix + data.main_img_url
+    if (!data.main_img_url.startsWith('http')) {
+      data.main_img_url = global.config.imagePrefix + data.main_img_url
+    }
   } else if (this instanceof Order) {
     data.snap_address = JSON.parse(data.snap_address)
     data.snap_items = JSON.parse(data.snap_items)

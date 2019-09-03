@@ -7,15 +7,6 @@ function isThisType(val) {
   return false
 }
 
-const LoginType = {
-  USER_MINI_PROGRAM: 100,
-  USER_EMAIL: 101,
-  USER_MOBILE: 102,
-  ADMIN_EMAIL: 200,
-  USER_USERNAME: 103,
-  isThisType
-}
-
 const OrderStatus = {
   // 待支付
   UNPAID: 1,
@@ -34,7 +25,4 @@ const OrderStatus = {
   isThisType
 }
 
-module.exports = {
-  LoginType,
-  OrderStatus
-}
+module.exports = OrderStatus
