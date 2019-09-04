@@ -7,7 +7,8 @@ const {
 } = require('../models/user')
 
 const {
-  LoginType
+  LoginType,
+  PayType
 } = require('../lib/enum')
 
 class PositiveIntegerValidator extends WecValidator {
@@ -19,6 +20,22 @@ class PositiveIntegerValidator extends WecValidator {
         min: 1
       })
     ]
+  }
+}
+
+class PreOrderValidator extends PositiveIntegerValidator{
+  constructor(){
+    super()
+  }
+
+  validatePayType(vals) {
+    if (!vals.payType) {
+      throw new Error('payType必须是参数')
+    } else if (!PayType.isThisType(vals.payType)) {
+      throw new Error('payType参数不合法')
+    } else {
+      return true
+    }
   }
 }
 
@@ -206,5 +223,6 @@ module.exports = {
   NotEmptyValidator,
   PaginationValidator,
   CategroyValidator,
-  ACLoginValidator
+  ACLoginValidator,
+  PreOrderValidator
 }

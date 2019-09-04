@@ -7,7 +7,8 @@ const {
   Auth
 } = require('../../../../middlewares/auth')
 const {
-  PositiveIntegerValidator
+  PositiveIntegerValidator,
+  PreOrderValidator
 } = require('../../../validators/validator')
 
 const Pay = require('../../../models/pay')
@@ -16,7 +17,7 @@ const Pay = require('../../../models/pay')
  * 支付预订单
  */
 router.post('/pre_order', new Auth().m, async (ctx, next) => {
-  const params = await new PositiveIntegerValidator().validate(ctx)
+  const params = await new PreOrderValidator().validate(ctx)
   const result = await Pay.preOrder(params)
   ctx.body = result
 })

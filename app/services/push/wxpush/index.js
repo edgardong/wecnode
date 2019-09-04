@@ -42,8 +42,14 @@ class WxPush {
         }
       }
     }
-    console.log('推送的数据', pushData)
-    axios.post(url, pushData)
+    console.log('推送的数据', url, pushData)
+    setTimeout(async () => {
+      // https://developers.weixin.qq.com/community/develop/doc/000a827d720098fe17f87239a53400
+      // 延时原因
+      const result = await axios.post(url, pushData)
+      console.log('消息推送返回值: ', result.data)
+      // { errcode: 0, errmsg: 'ok' }
+    }, 20000)
   }
 
 }

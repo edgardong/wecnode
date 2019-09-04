@@ -8,16 +8,15 @@ const {
   Product
 } = require('./product')
 const {
-  OrderStatus
+  OrderStatus,
+  PayType
 } = require('../lib/enum')
 const WxPush = require('../services/push/wxpush')
 const WxPay = require('../services/pay/wxpay/wxpay')
-const {
-  getXMLNodeValueByKey
-} = require('../services/pay/wxpay/util')
 
 class Pay {
   static async preOrder(params) {
+    let payType = params.payType
     const order = await Order.findOne({
       where: {
         id: params.id
@@ -31,7 +30,10 @@ class Pay {
     const ids = order.snap_items.map(item => item.id)
     const result = await Order.checkStockByIds(ids, order.snap_items)
     if (result.pass) {
-      const data = await WxPay.unifiedOrder(order)
+      let data = null
+      if (payType === PayType.WECHAT_MINI_PAY) {
+        data = await WxPay.unifiedOrder(order)
+      }
       // 回写订单预支付id
       const prepay_id = data.package.replace('prepay_id=', '')
       Order.update({
@@ -90,6 +92,7 @@ class Pay {
         order_no: order.order_no,
         id: order.id
       }
+      // 推送微信消息
       WxPush.sendPayMessage(pushData)
 
       sequelize.transaction((t) => {
