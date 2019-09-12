@@ -1,7 +1,7 @@
 const {
   WecValidator,
   WecRule
-} = require('../../wec-tools')
+} = require('wec-tools')
 const {
   User
 } = require('../models/user')

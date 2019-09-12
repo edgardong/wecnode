@@ -1,6 +1,6 @@
 const {
   WecException
-} = require('../wec-tools')
+} = require('wec-tools')
 
 const catchError = async (ctx, next) => {
   try {
