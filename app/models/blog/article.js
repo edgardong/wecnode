@@ -51,8 +51,17 @@ Article.init({
     comment: '文章状态 0: 已发布 1:草稿中'
   },
   content: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     comment: '文章内容'
+  },
+  content_type: {
+    type: DataTypes.INTEGER,
+    default:1,
+    comment:'内容类型：1, 富文本编辑 2, markdown编辑'
+  },
+  introduction:{
+    type:DataTypes.STRING,
+    comment:'文章简介'
   },
   author_id: {
     type: DataTypes.INTEGER,

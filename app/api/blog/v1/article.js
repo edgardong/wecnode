@@ -9,4 +9,12 @@ router.get('/pagination', async (ctx,next)=> {
   ctx.body = result
 })
 
+router.get('/:id', async (ctx,next)=> {
+	const result = await Article.findOne({
+		where: {
+			id: ctx.params.id
+		}
+	})
+	ctx.body=result
+})
 module.exports = router
