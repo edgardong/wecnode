@@ -4,9 +4,10 @@ const router = new Router({
 })
 
 const Article = require('../../../models/blog/article')
+
 router.get('/pagination', async (ctx,next)=> {
   const result = await Article.getPaginationArticle()
-  ctx.body = result
+  ctx.body = {data:result}
 })
 
 router.get('/:id', async (ctx,next)=> {
